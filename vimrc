@@ -9,6 +9,7 @@ call plug#begin()
   Plug 'vim-airline/vim-airline'
   
   Plug 'LnL7/vim-nix', { 'for': 'nix' }
+  Plug 'elkowar/yuck.vim', { 'for': 'yuck' }
 call plug#end()
 
 filetype indent on
