@@ -18,3 +18,5 @@ syntax on
 colorscheme wal
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
+
+let g:airline_powerline_fonts = 1
