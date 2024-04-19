@@ -6,7 +6,12 @@
       ./hardware-configuration.nix
     ];
 
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.cudaSupport = true;
 
   boot.loader = {
     efi = {
@@ -20,7 +25,17 @@
     };
   };
 
-  xdg.portal.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -37,15 +52,17 @@
     ];
     packages = with pkgs; [
       btop
+      blender
+      discord
       eww
-      # blender
-      # discord
+      hyprpaper
       kitty
       neofetch
       pywal
       ranger
       wofi
       wl-clipboard
+      zoxide
     ];
   };
 
@@ -85,6 +102,17 @@
     pipewire.alsa.enable = true;
     pipewire.alsa.support32Bit = true;
     pipewire.pulse.enable = true;
+    pipewire.wireplumber.enable = true;
+    pipewire.wireplumber.configPackages = [
+      (pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/51-bluez-config.lua" ''
+        bluez_monitor.properties = {
+          ["bluez5.enable-sbc-xq"] = true,
+            ["bluez5.enable-msbc"] = true,
+            ["bluez5.enable-hw-volume"] = true,
+            ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+        }
+      '')
+    ];
 
     hardware.openrgb.enable = true;
   };
