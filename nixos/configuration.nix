@@ -45,6 +45,7 @@
       pywal
       ranger
       wofi
+      wl-clipboard
     ];
   };
 
@@ -77,6 +78,7 @@
 
   services = {
     xserver.enable = true;
+    xserver.excludePackages = [ pkgs.xterm ];
     xserver.displayManager.startx.enable = true;
 
     pipewire.enable = true;
