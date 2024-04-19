@@ -6,15 +6,22 @@
       ./hardware-configuration.nix
     ];
 
-  xdg.portal.enable = true;
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.cudaSupport = true;
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+    grub = {
+      devices = [ "nodev" ];
+      efiSupport = true;
+      enable = true;
+    };
+  };
 
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  xdg.portal.enable = true;
+  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";
@@ -22,14 +29,16 @@
   # User settings
   users.users.florian = {
     isNormalUser = true;
+    description = "Florian";
     extraGroups = [
+      "pipewire"
       "wheel"
       "networkmanager"
     ];
     packages = with pkgs; [
       btop
-      blender
-      discord
+      # blender
+      # discord
       kitty
       neofetch
       pywal
@@ -43,9 +52,9 @@
       EDITOR = "vim";
 
       XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME = "$HOME/.cache";
-      XDG_STATE_HOME = "$HOME/.local/share";
-      XDG_RUNTIME_DIR = "$HOME/.local/state";
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_DATA_HOME = "$HOME/.local/share";
+      XDG_STATE_HOME = "$HOME/.local/state";
     };
 
     systemPackages = with pkgs; [
@@ -53,37 +62,33 @@
       htop
       lshw
       pciutils
+      psmisc
+      pulseaudio
       tmux
       unzip
       vim
     ];
-
-    plasma5.excludePackages = with pkgs.libsForQt5; [];
-  };
-
-  hardware = {
-    opengl.enable = true;
   };
 
   sound.enable = true;
   security.rtkit.enable = true;
+  hardware.pulseaudio.enable = false;
 
   services = {
     xserver.enable = true;
-    xserver.displayManager.sddm.enable = true;
-    xserver.desktopManager.plasma5.enable = true;
+    xserver.displayManager.startx.enable = true;
 
     pipewire.enable = true;
     pipewire.alsa.enable = true;
     pipewire.alsa.support32Bit = true;
     pipewire.pulse.enable = true;
-    pipewire.jack.enable = true;
 
     hardware.openrgb.enable = true;
   };
 
   programs = {
     firefox.enable = true;
+    hyprland.enable = true;
     steam.enable = true;
   };
 
@@ -95,4 +100,3 @@
 
   system.stateVersion = "23.11"; # Did you read the comment?
 }
-
