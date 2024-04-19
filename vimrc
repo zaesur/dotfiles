@@ -1,6 +1,7 @@
 call plug#begin()
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-commentary'
   Plug 'dylanaraps/wal.vim'
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/goyo.vim'
