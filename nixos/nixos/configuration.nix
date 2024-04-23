@@ -7,11 +7,11 @@
     ];
 
   nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
+    # "nix-command"
+    # "flakes"
   ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.cudaSupport = true;
+  # nixpkgs.config.cudaSupport = true;
 
   boot.loader = {
     efi = {
@@ -44,6 +44,14 @@
     };
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ 
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+    ];
+  };
+
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -58,8 +66,9 @@
       "networkmanager"
     ];
     packages = with pkgs; [
-      btop
+      ags
       blender
+      btop
       brightnessctl
       discord
       eww
@@ -79,8 +88,6 @@
 
   environment = {
     sessionVariables = {
-      EDITOR = "vim";
-
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_DATA_HOME = "$HOME/.local/share";
@@ -133,6 +140,11 @@
     firefox.enable = true;
     hyprland.enable = true;
     steam.enable = true;
+
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
   };
 
   fonts.packages = with pkgs; [
