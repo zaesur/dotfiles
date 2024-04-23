@@ -25,15 +25,23 @@
     };
   };
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
+  hardware = {
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+    };
 
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
+    nvidia = {
+      modesetting.enable = true;
+      open = false;
+      nvidiaSettings = true;
+    };
+
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
   };
 
   networking.networkmanager.enable = true;
@@ -46,20 +54,23 @@
     isNormalUser = true;
     description = "Florian";
     extraGroups = [
-      "pipewire"
       "wheel"
       "networkmanager"
     ];
     packages = with pkgs; [
       btop
       blender
+      brightnessctl
       discord
       eww
+      hypridle
+      hyprlock
       hyprpaper
       kitty
       neofetch
       pywal
       ranger
+      waybar
       wofi
       wl-clipboard
       zoxide
@@ -96,6 +107,7 @@
   services = {
     xserver.enable = true;
     xserver.excludePackages = [ pkgs.xterm ];
+    xserver.videoDrivers = [ "nvidia" ];
     xserver.displayManager.startx.enable = true;
 
     pipewire.enable = true;
