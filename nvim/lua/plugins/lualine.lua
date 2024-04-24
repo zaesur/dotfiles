@@ -5,7 +5,12 @@ return {
 
     lualine.setup({
       options = {
-        theme = "dracula"
+        theme = "dracula",
+      },
+      extensions = {
+        "lazy",
+        "neo-tree",
+        "mason"
       }
     })
 
