@@ -70,6 +70,7 @@
       blender
       btop
       brightnessctl
+      colorz
       discord
       eww
       hypridle
@@ -86,6 +87,7 @@
 
       eslint_d
       lua-language-server
+      nil
       prettierd
       stylua
       nodePackages.typescript-language-server
@@ -157,6 +159,7 @@
     font-awesome
     powerline-fonts
     powerline-symbols
+    (nerdfonts.override { fonts = [ "FiraCode"]; })
   ];
 
   system.stateVersion = "23.11"; # Did you read the comment?
