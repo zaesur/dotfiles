@@ -83,6 +83,12 @@
       wofi
       wl-clipboard
       zoxide
+
+      eslint_d
+      lua-language-server
+      prettierd
+      stylua
+      nodePackages.typescript-language-server
     ];
   };
 
