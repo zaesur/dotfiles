@@ -1,7 +1,6 @@
 return {
-	{ "tpope/vim-surround" },
-	{ "tpope/vim-commentary" },
-	{ "tpope/vim-fugitive" },
-	{ "junegunn/vim-easy-align" },
-	{ "LnL7/vim-nix" },
+  { "tpope/vim-fugitive" },
+  { "tpope/vim-surround" },
+  { "tpope/vim-commentary" },
+  { "junegunn/vim-easy-align" },
 }

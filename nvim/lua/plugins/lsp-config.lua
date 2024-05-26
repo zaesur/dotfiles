@@ -1,43 +1,132 @@
 return {
-  -- {
-  --   "williamboman/mason.nvim",
-  --   config = function()
-  --     require("mason").setup()
-  --   end
-  -- },
-  -- {
-  --   "williamboman/mason-lspconfig.nvim",
-  --   config = function()
-  --     require("mason-lspconfig").setup({
-  --       -- ensure_installed = { "lua_ls", "tsserver" }
-  --     })
-  --   end
-  -- },
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      local lspconfig = require("lspconfig")
+	{
+		"williamboman/mason.nvim",
+		lazy = false,
+		config = function()
+			require("mason").setup()
+		end,
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
+		lazy = false,
+		opts = {
+			ensure_installed = {
+				"lua_ls",
+				"tsserver",
+				"pyright",
+				"taplo",
+			},
+		},
+	},
+	{
+		"neovim/nvim-lspconfig",
+		lazy = false,
+		dependencies = {
+			"folke/neodev.nvim",
+			"hrsh7th/cmp-nvim-lsp",
+		},
+		config = function()
+			require("neodev").setup() -- For NeoVim development
 
-      lspconfig.lua_ls.setup({})
-      lspconfig.tsserver.setup({})
-      lspconfig.nil_ls.setup({})
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local lspconfig = require("lspconfig")
 
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+			lspconfig.tsserver.setup({
+				capabilities = capabilities,
+			})
 
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
-      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
-      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+			lspconfig.pyright.setup({
+				capabilities = capabilities,
+			})
 
-      -- { '[d', vim.diagnostic.goto_prev },
-      -- { ']d', vim.diagnostic.goto_next },
-      -- { ' ' , vim.lsp.buf.hover },
-      -- { ' s', vim.lsp.buf.signature_help },
-      -- { ' d', vim.diagnostic.open_float },
-      -- { ' q', vim.diagnostic.setloclist },
-      -- { '\\r', vim.lsp.buf.rename },
-      -- { '\\a', vim.lsp.buf.code_action },
-    end,
-  },
+			lspconfig.rust_analyzer.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.gopls.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.html.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.lua_ls.setup({
+				capabilities = capabilities,
+				-- For NeoVim development
+				settings = {
+					Lua = {
+						completion = { callSnippet = "Replace" },
+					},
+				},
+			})
+
+			lspconfig.taplo.setup({
+				capabilities = capabilities,
+				settings = {
+					evenBetterToml = {
+						schema = {
+							associations = {
+								["pyproject\\.toml"] = "https://json.schemastore.org/pyproject.json",
+							},
+						},
+					},
+				},
+			})
+
+			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
+			vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
+			vim.keymap.set("n", "rs", vim.lsp.buf.rename, {})
+			vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+		end,
+	},
+	{
+		"nvimtools/none-ls.nvim",
+		debug = true,
+		dependencies = { "nvimtools/none-ls-extras.nvim" },
+		config = function()
+			-- Eslint: https://github.com/nvimtools/none-ls-extras.nvim
+			local null_ls = require("null-ls")
+			local eslint_diagnostics = require("none-ls.diagnostics.eslint_d")
+			local eslint_code_actions = require("none-ls.code_actions.eslint_d")
+
+			local node_modules = "node_modules/.bin"
+			local check_configuration = function(utils)
+				return true -- utils.root.has_file_matches("eslint")
+			end
+
+			null_ls.setup({
+				sources = {
+					-- Lua
+					null_ls.builtins.formatting.stylua,
+
+					-- Python
+					null_ls.builtins.formatting.black.with({
+						extra_args = { "--line-length=120" },
+					}),
+
+					-- Prettier
+					null_ls.builtins.formatting.prettier.with({
+						prefer_local = node_modules,
+					}),
+
+					-- Eslint
+					eslint_diagnostics.with({
+						condition = check_configuration,
+						prefer_local = node_modules,
+					}),
+
+					eslint_code_actions.with({
+						condition = check_configuration,
+						prefer_local = node_modules,
+					}),
+				},
+			})
+
+			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+		end,
+	},
 }

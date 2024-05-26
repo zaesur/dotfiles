@@ -1,11 +1,16 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
-  branch= "v3.x",
+  branch = "v3.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "MunifTanjim/nui.nvim"
-  }, 
+    "nvim-tree/nvim-web-devicons",
+    "MunifTanjim/nui.nvim",
+  },
   config = function()
-    vim.keymap.set("n", "<C-n>", ":Neotree filesystem reveal left toggle<CR>", {})
-  end
+    local nt = require("neo-tree.command")
+
+    vim.keymap.set("n", "<C-n>", function()
+      nt.execute({ position = "left", toggle = true, reveal = true })
+    end, {})
+  end,
 }

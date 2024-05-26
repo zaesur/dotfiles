@@ -4,28 +4,28 @@ return {
     local lualine = require("lualine")
 
     lualine.setup({
-      options = {
-        theme = "dracula",
-      },
       extensions = {
         "lazy",
+        "mason",
         "neo-tree",
-        "mason"
-      }
+      },
+      options = {
+        theme = "tokyonight",
+      },
     })
 
-    vim.api.nvim_create_autocmd({ "User"}, {
+    vim.api.nvim_create_autocmd({ "User" }, {
       pattern = "GoyoEnter",
       callback = function()
         lualine.hide()
-      end
+      end,
     })
 
-    vim.api.nvim_create_autocmd({ "User"}, {
+    vim.api.nvim_create_autocmd({ "User" }, {
       pattern = "GoyoLeave",
       callback = function()
         lualine.hide({ unhide = true })
-      end
+      end,
     })
-  end
+  end,
 }
