@@ -5,5 +5,5 @@ if [ ! -d "$HOME/.config" ]; then
 fi
 
 CURRENT_DIR="$(pwd)"
-ln -s -f "$CURRENT_DIR/nvim" "$HOME/.config/nvim"
+ln -s -f "$CURRENT_DIR/nvim" "$HOME/.config"
 ln -s -f "$CURRENT_DIR/bashrc" "$HOME/.bashrc"
